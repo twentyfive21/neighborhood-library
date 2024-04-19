@@ -59,8 +59,7 @@ public class Book {
     // override toString
     @Override
     public String toString() {
-        return "Book" +
-                "id=" + id +
+        return "Book id=" + id +
                 ", isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
                 ", isCheckedOut=" + isCheckedOut +
@@ -68,9 +67,11 @@ public class Book {
     }
     // methods
     public void checkOut (String name) {
-
+        setCheckedOutTo(name);
+        setCheckedOut(true);
     }
     public void checkIn () {
-
+        setCheckedOutTo("");
+        setCheckedOut(false);
     }
 }
