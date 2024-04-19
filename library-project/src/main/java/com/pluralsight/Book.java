@@ -46,7 +46,7 @@ public class Book {
     }
 
     public void setCheckedOut(boolean checkedOut) {
-        isCheckedOut = checkedOut;
+        this.isCheckedOut = checkedOut;
     }
 
     public String getCheckedOutTo() {
@@ -70,7 +70,7 @@ public class Book {
         setCheckedOutTo(name);
         setCheckedOut(true);
     }
-    public void checkIn () {
+    public void checkIn (String emptyName) {
         setCheckedOutTo("");
         setCheckedOut(false);
     }

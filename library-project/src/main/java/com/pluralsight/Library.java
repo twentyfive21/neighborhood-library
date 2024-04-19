@@ -6,8 +6,6 @@ public class Library {
         // array holding 20 books
         Book[] books = new Book[20];
         setLibrary(books);
-        getAvailableBooks(books);
-        getUnavailableBooks(books);
         getUserInfo(books);
     }
 
@@ -36,47 +34,105 @@ public class Library {
     // get user info method
     public static void getUserInfo(Book[] books){
         Scanner scanner = new Scanner(System.in);
-        System.out.print("What number ? ");
+        System.out.print("Welcome to Ethereal library!\n~ Please choose an option below ~ "+
+                "\n(1) Show Available Books"+"\n(2) Show Checked out books"
+                +"\n(3) Exit Library\n" + "Selection: ");
         int selection = scanner.nextInt();
+        // clear leftover CRLF in buffer
+        scanner.nextLine();
         switch (selection) {
-            case 1 : getAvailableBooks(books);
+            case 1 : getAvailableBooks(books,scanner);
                 break;
-            case 2: getUnavailableBooks(books);
+            case 2: getUnavailableBooks(books,scanner);
                 break;
             case 3: quitProgram();
             default: getUserInfo(books);
         }
     }
     // available books method
-    public static void getAvailableBooks(Book[] books){
+    public static void getAvailableBooks(Book[] books, Scanner scanner){
+        System.out.println("\n~~~~~~~~~ Available Books ~~~~~~~~~\n");
         for (Book book : books ){
             if(!book.isCheckedOut()) {
-                System.out.print(book.getId() + " ");
-                System.out.print(book.getIsbn() + " " );
-                System.out.print(book.getTitle() + " ");
+                System.out.print("Book ID: " + book.getId() + " \n");
+                System.out.print("Book ISBN: " + book.getIsbn() + " \n" );
+                System.out.print("Book Title: " + book.getTitle() + " \n");
                 System.out.println("\n");
             }
+        }
+        System.out.println("\n~~~~~~~~~ End of available books ~~~~~~~~~\n");
+        System.out.println("Would you like to check out a book today? Y(yes) or N(no)\n");
+        System.out.print("Selection: ");
+        String choice = scanner.nextLine().toLowerCase().trim();
+
+        switch (choice){
+            case "y": checkOutBook(scanner, books);
+                    break;
+            case "n":
+            default :
+                    getUserInfo(books);
+                    break;
         }
         runProgramAgain(books);
     }
     // unavailable books method
-    public static void getUnavailableBooks(Book[] books){
-        System.out.println("\nCHECKED OUT BOOKS");
+    public static void getUnavailableBooks(Book[] books, Scanner scanner){
+        System.out.println("\n~~~~~~~~~ Unavailable Books ~~~~~~~~~\n");
         for (Book book : books ){
             if(book.isCheckedOut()) {
-                System.out.print(book.getId() + " ");
-                System.out.print(book.getIsbn() + " " );
-                System.out.print(book.getTitle() + " ");
-                System.out.println(book.getCheckedOutTo());
-                System.out.println("\n");
+                System.out.print("Book ID: " + book.getId() + " \n");
+                System.out.print("Book ISBN: " + book.getIsbn() + " \n" );
+                System.out.print("Book Title: " + book.getTitle() + " \n");
+                System.out.println("Book currently checked out by: "
+                        + book.getCheckedOutTo() + "\n");
             }
+        }
+        System.out.println("\n~~~~~~~~~ End of unavailable books ~~~~~~~~~\n");
+        System.out.println("Would you like to check in a book today? Y(yes) or N(no)\n");
+        System.out.print("Selection: ");
+        String choice = scanner.nextLine().toLowerCase().trim();
+        switch (choice){
+            case "y": checkInBook(scanner, books);
+                break;
+            case "n":
+            default :
+                getUserInfo(books);
+                break;
         }
         runProgramAgain(books);
     }
     // check in book method
-
+    public static void checkInBook(Scanner scanner, Book[] books){
+        System.out.print("Provide the Book ID of the book you wish to check in: ");
+        int bookNum = scanner.nextInt();
+        bookNum = bookNum - 1;
+        scanner.nextLine();
+        // if book is checked out then allow user to check in
+        if (books[bookNum].isCheckedOut()){
+            books[bookNum].checkIn("");
+            System.out.println("\nCheck In Details: \n" +"Book ID: "+books[bookNum].getId()
+                    + "\nBook Title: "+ books[bookNum].getTitle() + "\n");
+        }
+    }
     // check out book method
-
+    public static void checkOutBook(Scanner scanner, Book[] books){
+        System.out.print("Provide the Book ID of the book you wish to check out: ");
+        int bookNum = scanner.nextInt();
+        // array is zero indexed so you need to account for that when indexing
+        // subtract one to get correct book id index
+        bookNum = bookNum - 1;
+        scanner.nextLine();
+        System.out.print("Please provide your name for checkout: ");
+        String nameOfCheckoutPerson = scanner.nextLine().trim();
+        // if book is not checked out then allow user to check it out
+        if (!books[bookNum].isCheckedOut()){
+            books[bookNum].checkOut(nameOfCheckoutPerson);
+            System.out.println("\nCheckout Details: \n" +"Book ID: "+books[bookNum].getId()
+                    + "\nBook Title: "+ books[bookNum].getTitle() + "\nChecked out Person: "
+                    + books[bookNum].getCheckedOutTo() + "\n");
+        }
+        runProgramAgain(books);
+    }
     // ~~~~~~~~~~~ quit program method ~~~~~
     public static void quitProgram() {
         System.out.println("\nYou have chosen to leave. \n" +
