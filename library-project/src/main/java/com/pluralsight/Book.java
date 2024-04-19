@@ -1,5 +1,6 @@
 package com.pluralsight;
 // This class is used to create a book object.
+// You will be able to check in, check out and view available books.
 public class Book {
     // class properties
    private int id;
@@ -71,7 +72,7 @@ public class Book {
         setCheckedOut(true);
     }
     public void checkIn (String emptyName) {
-        setCheckedOutTo("");
+        setCheckedOutTo(emptyName);
         setCheckedOut(false);
     }
 }

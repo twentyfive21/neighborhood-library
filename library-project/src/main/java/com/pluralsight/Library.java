@@ -1,6 +1,5 @@
 package com.pluralsight;
 import java.util.Scanner;
-
 public class Library {
     public static void main(String[] args) {
         // array holding 20 books
@@ -8,7 +7,7 @@ public class Library {
         setLibrary(books);
         getUserInfo(books);
     }
-
+    // preset library with 20 books for the user
     public static void setLibrary(Book[] books){
         books[0] = new Book(1, "ISBN1", "Kaitou Jeanne", false, "");
         books[1] = new Book(2, "ISBN2", "Psychic Princess", false, "");
@@ -46,7 +45,10 @@ public class Library {
             case 2: getUnavailableBooks(books,scanner);
                 break;
             case 3: quitProgram();
-            default: getUserInfo(books);
+            break;
+            default: System.out.println("Error Please choose one of the 3 options");
+                getUserInfo(books);
+                break;
         }
     }
     // available books method
@@ -61,15 +63,15 @@ public class Library {
             }
         }
         System.out.println("\n~~~~~~~~~ End of available books ~~~~~~~~~\n");
-        System.out.println("Would you like to check out a book today? Y(yes) or N(no)\n");
+        System.out.println("Would you like to check out a book today? Yes(y) or No(n)\n");
         System.out.print("Selection: ");
         String choice = scanner.nextLine().toLowerCase().trim();
-
         switch (choice){
             case "y": checkOutBook(scanner, books);
                     break;
-            case "n":
-            default :
+            case "n": getUserInfo(books);
+                    break;
+            default : System.out.println("Error Please choose Y(yes) or N(no)");
                     getUserInfo(books);
                     break;
         }
@@ -88,14 +90,16 @@ public class Library {
             }
         }
         System.out.println("\n~~~~~~~~~ End of unavailable books ~~~~~~~~~\n");
-        System.out.println("Would you like to check in a book today? Y(yes) or N(no)\n");
+        System.out.println("Would you like to check in a book today? Yes(y) or No(n)\n");
         System.out.print("Selection: ");
         String choice = scanner.nextLine().toLowerCase().trim();
         switch (choice){
             case "y": checkInBook(scanner, books);
                 break;
-            case "n":
+            case "n":  getUserInfo(books);
+                break;
             default :
+                System.out.println("Error Please choose Yes(y) or No(n)");
                 getUserInfo(books);
                 break;
         }
@@ -105,21 +109,23 @@ public class Library {
     public static void checkInBook(Scanner scanner, Book[] books){
         System.out.print("Provide the Book ID of the book you wish to check in: ");
         int bookNum = scanner.nextInt();
-        bookNum = bookNum - 1;
         scanner.nextLine();
+        bookNum = bookNum - 1;
         // if book is checked out then allow user to check in
         if (books[bookNum].isCheckedOut()){
             books[bookNum].checkIn("");
             System.out.println("\nCheck In Details: \n" +"Book ID: "+books[bookNum].getId()
                     + "\nBook Title: "+ books[bookNum].getTitle() + "\n");
+        } else {
+            System.out.println("\nBook is already checked in.");
         }
+        runProgramAgain(books);
     }
     // check out book method
     public static void checkOutBook(Scanner scanner, Book[] books){
         System.out.print("Provide the Book ID of the book you wish to check out: ");
         int bookNum = scanner.nextInt();
-        // array is zero indexed so you need to account for that when indexing
-        // subtract one to get correct book id index
+        // array is zero indexed subtract 1 to get correct book id index
         bookNum = bookNum - 1;
         scanner.nextLine();
         System.out.print("Please provide your name for checkout: ");
@@ -130,6 +136,9 @@ public class Library {
             System.out.println("\nCheckout Details: \n" +"Book ID: "+books[bookNum].getId()
                     + "\nBook Title: "+ books[bookNum].getTitle() + "\nChecked out Person: "
                     + books[bookNum].getCheckedOutTo() + "\n");
+        } else {
+            System.out.println("This book is already checked out\n" +
+                    "Please view our available books selection again!\n");
         }
         runProgramAgain(books);
     }
@@ -142,7 +151,7 @@ public class Library {
     // ~~~~~~~~~~~ re-run program method  ~~~~~
     // allows user to interact again without having to re-run the program and lose changes
     public static void runProgramAgain(Book[] books){
-        System.out.println("Would you like to do anything else today? ");
+        System.out.println("~~~ Would you like to do anything else today? ~~~");
         getUserInfo(books);
     }
 }
