@@ -75,7 +75,6 @@ public class Library {
                     getUserInfo(books);
                     break;
         }
-        runProgramAgain(books);
     }
     // unavailable books method
     public static void getUnavailableBooks(Book[] books, Scanner scanner){
@@ -103,7 +102,6 @@ public class Library {
                 getUserInfo(books);
                 break;
         }
-        runProgramAgain(books);
     }
     // check in book method
     public static void checkInBook(Scanner scanner, Book[] books){
